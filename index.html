@@ -2,65 +2,69 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JourneyMate • Prototype</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="JourneyMate — plan less, experience more. A mobile trip planner prototype with AI travel suggestions." />
+    <meta name="theme-color" content="#ff8a2a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="JourneyMate" />
+    <meta property="og:title" content="JourneyMate" />
+    <meta property="og:description" content="Plan less, experience more." />
+    <meta property="og:image" content="assets/icon-512.png" />
+    <title>JourneyMate</title>
+    <link rel="icon" type="image/png" href="assets/icon-192.png" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
     <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body class="auth">
     <div class="phone-shell">
-        <header class="app-header">
-            <div class="logo-wrap">
-                <div class="logo-icon">
-                    <img src="assets/logo2.png" alt="JourneyMate logo" />
-                </div>
-                <div class="logo-text">
-                    <h1>JourneyMate</h1>
-                </div>
-            </div>
-            <nav class="top-nav" id="topNav" hidden>
-                <button class="nav-btn" data-route="#/home" aria-label="Home">Home</button>
-                <button class="nav-btn" data-route="#/planner" aria-label="Planner">Planner</button>
-                <button class="nav-btn" data-route="#/profile" aria-label="Profile">Profile</button>
-                <button class="nav-btn danger" id="logoutBtn">Log out</button>
-            </nav>
-        </header>
-
-        <main id="appRoot" class="app-root">
-            <small>© <span id="year"></span> JourneyMate (Prototype)</small>
+        <main id="appRoot" class="app-root" tabindex="-1">
             <!-- Views are injected here -->
         </main>
-    
-        <footer class="app-footer">
-            <small>© <span id="year"></span> JourneyMate (Prototype)</small>
-        </footer>
-    
-        <nav class="bottom-nav" id="bottomNav" hidden>
+
+        <nav class="bottom-nav" id="bottomNav" aria-label="Main" hidden>
             <div class="bottom-nav__inner">
-                <button class="tab" data-route="#/home" aria-label="Home">
-                    <span class="icon">🧳</span>
+                <button class="tab" data-route="#/home" data-match="#/home">
+                    <span class="icon" aria-hidden="true">🧳</span>
                     <span class="label">MyJourney</span>
                 </button>
-                <button class="tab" data-route="#/dates" aria-label="Planner">
-                    <span class="icon">🗺️</span>
+                <button class="tab" data-route="#/dates" data-match="#/dates #/planner">
+                    <span class="icon" aria-hidden="true">🗺️</span>
                     <span class="label">Planner</span>
                 </button>
-        
+
                 <!-- 中間浮動新增按鈕 -->
-                <button class="fab" id="fabNewPlan" aria-label="New Plan">＋</button>
-        
-                <button class="tab" data-route="#/map" id="mapTab">
-                    <div class="icon">📍</div><div class="label">Map</div>
+                <button class="fab" id="fabNewPlan" aria-label="New trip">＋</button>
+
+                <button class="tab" data-route="#/map" data-match="#/map">
+                    <span class="icon" aria-hidden="true">📍</span>
+                    <span class="label">Map</span>
                 </button>
-                
-                <button class="tab" data-route="#/profile" aria-label="Profile">
-                    <span class="icon">👤</span>
+                <button class="tab" data-route="#/profile" data-match="#/profile">
+                    <span class="icon" aria-hidden="true">👤</span>
                     <span class="label">Profile</span>
                 </button>
             </div>
         </nav>
-    </div>
 
-    
+        <!-- AI assistant -->
+        <button class="ai-fab" id="aiFab" aria-label="AI suggestions" aria-expanded="false" aria-controls="aiPanel" hidden>
+            🤖<span class="dot" aria-hidden="true"></span>
+        </button>
+        <section class="ai-panel" id="aiPanel" aria-label="AI suggestion" hidden>
+            <div class="ai-head">
+                <div class="ai-title">AI suggestion</div>
+                <div class="ai-wallet" title="AI tokens">🪙 <b id="aiWalletCount">0</b></div>
+                <button class="ai-close" id="aiClose" aria-label="Close">✕</button>
+            </div>
+            <div id="aiSuggestions"></div>
+            <div class="ai-foot">
+                <button class="btn outline" id="aiClaimBtn">Get daily token (+1)</button>
+            </div>
+        </section>
+
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
 
     <script src="app.js"></script>
 </body>
