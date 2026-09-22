@@ -40,7 +40,7 @@
                     <span class="icon" aria-hidden="true">📍</span>
                     <span class="label">Map</span>
                 </button>
-                <button class="tab" data-route="#/profile" data-match="#/profile">
+                <button class="tab" data-route="#/profile" data-match="#/profile #/saved #/reviews #/wallet">
                     <span class="icon" aria-hidden="true">👤</span>
                     <span class="label">Profile</span>
                 </button>
@@ -54,7 +54,7 @@
         <section class="ai-panel" id="aiPanel" aria-label="AI suggestion" hidden>
             <div class="ai-head">
                 <div class="ai-title">AI suggestion</div>
-                <div class="ai-wallet" title="AI tokens">🪙 <b id="aiWalletCount">0</b></div>
+                <a class="ai-wallet" href="#/wallet" title="Open wallet">🪙 <b data-token-balance>0</b></a>
                 <button class="ai-close" id="aiClose" aria-label="Close">✕</button>
             </div>
             <div id="aiSuggestions"></div>
@@ -66,6 +66,6 @@
         <div class="toast" id="toast" role="status" aria-live="polite"></div>
     </div>
 
-    <script src="app.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

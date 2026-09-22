@@ -18,23 +18,39 @@ It combines a simple trip organiser with an AI assistant that suggests itinerary
 
 ## Features
 
-- **MyJourney** – upcoming / completed / canceled trips, sorted by date
-- **Planner** – pick a date range on a calendar, then create or edit a trip (destination, dates, budget, notes); cancel or restore trips
-- **AI suggestions** – context-aware tips for the trip you're viewing; applying one costs 🪙1 token and adds it to your notes
-- **Daily token** – claim one free token per day (simulated rewarded ad)
-- **Map** – embedded Google Maps search, "use my location", and open in Google Maps
-- **Share** – native share sheet on mobile, clipboard fallback on desktop
+The features connect into one loop: **discover → save → plan → travel → review → earn**.
+
+- **MyJourney** – upcoming / completed / canceled trips, with a nudge to review finished trips
+- **Planner** – pick dates on a calendar, create or edit a trip, add stops, cancel or restore, save as a template
+- **Saved**
+  - *Places* – 38 curated Queensland spots, filter by category, add to a trip in one tap
+  - *Tips* – bookmark AI suggestions and apply them to any trip later
+  - *Templates* – reuse a past trip with new dates
+- **My Reviews** – star ratings, tags and notes for trips and places; completed trips show up in a "to review" list
+- **Wallet**
+  - *Tokens* – balance, ways to earn, achievements and a full history ledger
+  - *Expenses* – track spending per trip against the budget, with a category breakdown
+- **AI suggestions** – context-aware tips for the trip you're viewing; applying one costs 🪙1
+- **Gamification** – daily reward, 3/7-day streak bonuses, review and trip-completion rewards, 7 achievements
+  (rewards are once per item and reviews are capped at 3 a day to prevent farming)
+- **Map** – embedded Google Maps search, curated picks for the city, "use my location"
 - Installable as a home-screen app (web manifest + icons)
 
 ## Tech
 
-Plain HTML, CSS and vanilla JavaScript — no build step, no dependencies.
+Plain HTML, CSS and vanilla JavaScript ES modules — no build step, no dependencies.
 
 ```
 index.html              App shell (bottom nav, AI panel, toast)
-app.js                  Hash router, views, state (localStorage)
 styles.css              Styles
-manifest.webmanifest    PWA manifest
+js/
+  main.js               Boot
+  router.js             Hash router
+  store.js              State, localStorage persistence + schema migration, token ledger, achievements, demo seed
+  utils.js              DOM, date and formatting helpers
+  data/places.js        Curated places
+  ui/                   Sheet, toast, stars, place cards, review sheet, badges, AI panel
+  views/                One module per screen
 assets/                 Logo and icons
 ```
 
