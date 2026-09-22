@@ -294,13 +294,15 @@ export function saveReview({ type, ref, rating, tags, text }) {
 }
 export function deleteReview(id) { mutate(s => { s.reviews = s.reviews.filter(r => r.id !== id); }); }
 
-// 待評論：已完成的行程 + 已完成行程裡去過的地點
+// 待評論：已完成的行程 + 最近 30 天內結束的行程裡去過的地點（趁記憶還新鮮）
 export function reviewTodo() {
     const s = load();
     const out = [];
     const seen = new Set();
+    const recent = fmt(addDays(new Date(), -30));
     s.trips.filter(t => tripStatus(t) === 'completed').sort((a, b) => b.end.localeCompare(a.end)).forEach(t => {
         if (!getReview('trip', t.id)) out.push({ type: 'trip', ref: t.id, trip: t });
+        if (t.end < recent) return;
         t.stops.forEach(pid => {
             if (seen.has(pid) || getReview('place', pid)) return;
             seen.add(pid);
@@ -373,7 +375,17 @@ export function seedState() {
         { id: 't1', city: 'Brisbane', start: d(5), end: d(7), budget: 120, emoji: '🌉', notes: 'South Bank • QAGOMA • CityCat', stops: ['qagoma', 'south-bank', 'eat-street'] },
         { id: 't2', city: 'Gold Coast', start: d(20), end: d(24), budget: 180, emoji: '🏄', notes: 'Surf & theme parks', stops: ['burleigh-np', 'miami-marketta'] },
         { id: 't3', city: 'Sunshine Coast', start: d(-12), end: d(-10), budget: 150, emoji: '🌴', notes: 'Noosa coastal walk, then Eumundi Markets on Saturday', stops: ['noosa-np', 'hastings-st', 'eumundi'] },
-        { id: 't4', city: 'Cairns', start: d(-60), end: d(-56), budget: 200, emoji: '🐠', notes: 'Reef day trip • Kuranda', stops: ['reef-trip', 'kuranda-rail', 'cairns-lagoon'] }
+        { id: 't4', city: 'Cairns', start: d(-60), end: d(-56), budget: 200, emoji: '🐠', notes: 'Reef day trip • Kuranda', stops: ['reef-trip', 'kuranda-rail', 'cairns-lagoon'] },
+        // Upcoming
+        { id: 't5', city: 'Sunshine Coast', start: d(38), end: d(41), budget: 160, emoji: '🐊', notes: 'Family trip: Australia Zoo, then beach days in Mooloolaba', stops: ['australia-zoo', 'mooloolaba-beach', 'glass-house'] },
+        { id: 't6', city: 'Sydney', start: d(75), end: d(79), budget: 220, emoji: '🌁', notes: 'Opera House tour • Bondi to Coogee walk • Manly ferry' },
+        // Completed
+        { id: 't7', city: 'Gold Coast', start: d(-120), end: d(-117), budget: 170, emoji: '🌊', notes: 'Hinterland day, then Burleigh for brunch', stops: ['springbrook', 'currumbin', 'burleigh-cafes'] },
+        { id: 't8', city: 'Brisbane', start: d(-200), end: d(-198), budget: 110, emoji: '🐨', notes: 'First weekend in Brisbane', stops: ['lone-pine', 'mt-coot-tha', 'story-bridge'] },
+        // Canceled
+        { id: 't9', city: 'Melbourne', start: d(30), end: d(33), budget: 200, emoji: '☕', notes: 'Flights got too pricey. Rebook for winter.', canceled: true },
+        { id: 't10', city: 'Airlie Beach', start: d(-45), end: d(-41), budget: 190, emoji: '⛵', notes: 'Called off because of a cyclone warning.', canceled: true },
+        { id: 't11', city: 'Byron Bay', start: d(55), end: d(57), budget: 150, emoji: '🌊', notes: 'Clashed with exams.', canceled: true }
     ].map(normalizeTrip);
 
     s.savedPlaces = ['qagoma', 'lone-pine', 'howard-smith', 'burleigh-np', 'springbrook', 'west-end-cafes'];
@@ -400,20 +412,32 @@ export function seedState() {
         { id: 'e6', tripId: 't3', amount: 86, category: 'food', note: 'Hastings St dinner', date: d(-12) },
         { id: 'e7', tripId: 't3', amount: 40, category: 'transport', note: 'Fuel', date: d(-11) },
         { id: 'e8', tripId: 't3', amount: 35, category: 'shopping', note: 'Eumundi Markets', date: d(-10) },
-        { id: 'e9', tripId: 't1', amount: 260, category: 'stay', note: 'South Bank hotel (booked)', date: d(-2) }
+        { id: 'e9', tripId: 't1', amount: 260, category: 'stay', note: 'South Bank hotel (booked)', date: d(-2) },
+        { id: 'e10', tripId: 't7', amount: 330, category: 'stay', note: 'Burleigh apartment, 3 nights', date: d(-120) },
+        { id: 'e11', tripId: 't7', amount: 64.9, category: 'activities', note: 'Currumbin Wildlife Sanctuary', date: d(-119) },
+        { id: 'e12', tripId: 't7', amount: 118, category: 'food', note: 'Brunches & dinners', date: d(-118) },
+        { id: 'e13', tripId: 't7', amount: 72, category: 'transport', note: 'Car hire fuel', date: d(-118) },
+        { id: 'e14', tripId: 't8', amount: 180, category: 'stay', note: 'CBD hostel', date: d(-200) },
+        { id: 'e15', tripId: 't8', amount: 159, category: 'activities', note: 'Story Bridge climb', date: d(-199) },
+        { id: 'e16', tripId: 't8', amount: 95, category: 'food', note: 'Eat Street & cafés', date: d(-199) },
+        { id: 'e17', tripId: 't5', amount: 69, category: 'activities', note: 'Australia Zoo tickets (pre-booked)', date: d(-4) }
     ];
 
     s.achievements = [
-        { id: 'first-steps', at: at(-70) },
-        { id: 'budget-boss', at: at(-56, 18) },
+        { id: 'first-steps', at: at(-210) },
+        { id: 'budget-boss', at: at(-198, 18) },
+        { id: 'globetrotter', at: at(-56, 18) },
         { id: 'explorer', at: at(-15) }
     ];
 
     s.ledger = [
-        entry(3, 'Welcome bonus', 'welcome', 'welcome', at(-70, 9)),
-        entry(1, 'Achievement · First Steps', 'achievement', 'first-steps', at(-70)),
+        entry(3, 'Welcome bonus', 'welcome', 'welcome', at(-210, 9)),
+        entry(1, 'Achievement · First Steps', 'achievement', 'first-steps', at(-210)),
+        entry(2, 'Completed Brisbane', 'trip', 't8', at(-198, 18)),
+        entry(2, 'Achievement · Budget Boss', 'achievement', 'budget-boss', at(-198, 18)),
+        entry(2, 'Completed Gold Coast', 'trip', 't7', at(-117, 18)),
         entry(2, 'Completed Cairns', 'trip', 't4', at(-56, 18)),
-        entry(2, 'Achievement · Budget Boss', 'achievement', 'budget-boss', at(-56, 18)),
+        entry(3, 'Achievement · Globetrotter', 'achievement', 'globetrotter', at(-56, 18)),
         entry(1, 'Review · Cairns trip', 'review', 'trip:t4', at(-55)),
         entry(-1, 'AI suggestion · Cairns', 'spend', '', at(-40)),
         entry(1, 'Review · Lone Pine Koala Sanctuary', 'review', 'place:lone-pine', at(-20)),
@@ -424,7 +448,7 @@ export function seedState() {
         entry(1, 'Daily reward', 'daily', d(-1), at(-1, 8))
     ];
 
-    s.stats = { aiApplied: 2 };
+    s.stats = { aiApplied: 2 };  // 再套用 1 次就解鎖 AI Buddy
     s.streak = { count: 2, last: d(-1), best: 4 };
     s.lastClaim = d(-1);
     return s;

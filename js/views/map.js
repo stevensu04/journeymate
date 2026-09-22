@@ -4,6 +4,9 @@ import { PLACES, placesForCity } from '../data/places.js';
 import { placeCard, wirePlaceList } from '../ui/places.js';
 import { toast } from '../ui/toast.js';
 
+// Google Maps 的 embed 端點不需要 API key；hl=en 固定英文介面與地名
+const embedURL = (q) => `https://maps.google.com/maps?q=${encodeURIComponent(q)}&z=13&hl=en&output=embed`;
+
 export function map(params) {
     const nextTrip = store.trips().filter(t => store.tripStatus(t) === 'upcoming').sort((a, b) => a.start.localeCompare(b.start))[0];
     const q = params.q || (nextTrip && nextTrip.city) || 'Brisbane';
@@ -25,7 +28,7 @@ export function map(params) {
 
                 <div class="map-box" id="mapBox">
                     <iframe id="mapFrame" title="Map of ${esc(q)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-                        src="https://maps.google.com/maps?q=${encodeURIComponent(q)}&z=13&output=embed"></iframe>
+                        src="${embedURL(q)}"></iframe>
                     <div class="map-overlay">
                         <button class="loc-btn" id="useLocation">📍 Use my location</button>
                     </div>
@@ -50,15 +53,14 @@ export function map(params) {
             const frame = $('#mapFrame');
             let query = q;
 
-            // Google Maps 的 embed 端點不需要 API key
-            const show = () => { frame.src = `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=13&output=embed`; };
+            const show = () => { frame.src = embedURL(query); };
 
             $('#mapForm').onsubmit = (e) => {
                 e.preventDefault();
                 const v = input.value.trim();
                 if (v) replaceHash('#/map?q=' + encodeURIComponent(v));
             };
-            $('#openExternal').onclick = () => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank', 'noopener');
+            $('#openExternal').onclick = () => window.open(`https://www.google.com/maps/search/?api=1&hl=en&query=${encodeURIComponent(query)}`, '_blank', 'noopener');
             $('#useLocation').onclick = () => {
                 if (!navigator.geolocation) { toast('Your browser does not support geolocation.'); return; }
                 toast('Finding you…');
