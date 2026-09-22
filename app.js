@@ -163,7 +163,7 @@
     /* ================= Views ================= */
     // 每個 view 回傳 { html, bind }，bind 在 DOM 掛上後執行
 
-    const legal = () => `<p class="legal">© ${new Date().getFullYear()} JourneyMate (Prototype)</p>`;
+    const legal = () => `<p class="legal">© 2025 JourneyMate</p>`;
 
     const Views = {
         login() {
