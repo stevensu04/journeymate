@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JourneyMate • Prototype</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="phone-shell">
+        <header class="app-header">
+            <div class="logo-wrap">
+                <div class="logo-icon">
+                    <img src="assets/logo2.png" alt="JourneyMate logo" />
+                </div>
+                <div class="logo-text">
+                    <h1>JourneyMate</h1>
+                </div>
+            </div>
+            <nav class="top-nav" id="topNav" hidden>
+                <button class="nav-btn" data-route="#/home" aria-label="Home">Home</button>
+                <button class="nav-btn" data-route="#/planner" aria-label="Planner">Planner</button>
+                <button class="nav-btn" data-route="#/profile" aria-label="Profile">Profile</button>
+                <button class="nav-btn danger" id="logoutBtn">Log out</button>
+            </nav>
+        </header>
+
+        <main id="appRoot" class="app-root">
+            <small>© <span id="year"></span> JourneyMate (Prototype)</small>
+            <!-- Views are injected here -->
+        </main>
+    
+        <footer class="app-footer">
+            <small>© <span id="year"></span> JourneyMate (Prototype)</small>
+        </footer>
+    
+        <nav class="bottom-nav" id="bottomNav" hidden>
+            <div class="bottom-nav__inner">
+                <button class="tab" data-route="#/home" aria-label="Home">
+                    <span class="icon">🧳</span>
+                    <span class="label">MyJourney</span>
+                </button>
+                <button class="tab" data-route="#/dates" aria-label="Planner">
+                    <span class="icon">🗺️</span>
+                    <span class="label">Planner</span>
+                </button>
+        
+                <!-- 中間浮動新增按鈕 -->
+                <button class="fab" id="fabNewPlan" aria-label="New Plan">＋</button>
+        
+                <button class="tab" data-route="#/map" id="mapTab">
+                    <div class="icon">📍</div><div class="label">Map</div>
+                </button>
+                
+                <button class="tab" data-route="#/profile" aria-label="Profile">
+                    <span class="icon">👤</span>
+                    <span class="label">Profile</span>
+                </button>
+            </div>
+        </nav>
+    </div>
+
+    
+
+    <script src="app.js"></script>
+</body>
+</html>
